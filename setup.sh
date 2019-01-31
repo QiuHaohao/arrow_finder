@@ -59,5 +59,4 @@ sudo nano /etc/dphys-swapfile
 sudo /etc/init.d/dphys-swapfile stop
 sudo /etc/init.d/dphys-swapfile start
 
-pip install picamera
 popd
