@@ -28,7 +28,6 @@ unzip opencv_contrib.zip
 wget https://bootstrap.pypa.io/get-pip.py
 sudo python get-pip.py
 sudo python3 get-pip.py #for python 3.x user
-pip install numpy
 
 # Compile and Install OpenCV
 cd ~/opencv-3.3.0/
