@@ -15,10 +15,18 @@ ARROW_LEFT = "ARROW_LEFT"
 ARROW_RIGHT = "ARROW_RIGHT"
 
 class ArrowFinder:
-    """docstring for ArrowFinder"""
+    """A class that detects solid white arrows found in rpi's camera.
+    
+    Attributes:
+        camera (PiCamera): a PiCamera object that captures images with the resolution as set in the argument resolution, which defaults to (1920,1088).
+        min_area (int): the minimum area of white contours in pixels. Any contour with area less than this value will be filtered away.
+        color_threshold (dict): the range of pixel intensity that is considered as white color.
+        max_aspect_ratio (float): the maximum aspect ratio of the bounding box of the arrows found. Any object found with bounding box with an aspect ratio larger than this value will be filtered
+        radian_epsilon (float): the radian range within which two radians are considered same
+        """
     def __init__(
             self, 
-            resolution=(1920,1080), 
+            resolution=(1920,1088), 
             min_area = 3000, 
             color_threshold={
                 'lower': 160,
@@ -187,6 +195,11 @@ class ArrowFinder:
         return frame
 
     def getArrows(self, withImage=False):
+        '''The method that captures an image and return arrows detected in the image and optionally the image captured with bounding box and arrow label drawn on it.
+
+        Args:
+            withImage (bool): whether to generate the image with bounding boxes and arrow labels, defaults to False
+        '''
         ims = self._capture(color=withImage)
         gray = ims['gray']
         arrows = self._find_arrows(gray)
