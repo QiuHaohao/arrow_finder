@@ -1,1 +1,1 @@
-from ArrowFinder import ArrowFinder
+from .ArrowFinder import ArrowFinder
