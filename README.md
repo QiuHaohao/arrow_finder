@@ -1,4 +1,4 @@
-# arrow-finder
+# arrow_finder
 A Python module that finds arrow from Raspberry Pi camara
 
 ## Usage
