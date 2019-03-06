@@ -216,14 +216,19 @@ def _main():
     n = 0
     # Run the infinite loop
     while True:
-        result = af.getArrows(with_image=False)
+        input("Press Enter to take a picture")
+        result = af.getArrows(with_image=True)
         arrows = result['arrows']
-        print(arrows)
-        # image = result['image']
-        # # Save image
-        # im = Image.fromarray(image)
-        # im.save('pics/{}.jpg'.format(n))
+        print("Arrows deteched: {}".format(arrows))
+        image = result['image']
+        # Save image
+        im = Image.fromarray(image)
+        im.save('pics/{}.jpg'.format(n))
         n += 1
+        if image:
+            print("Arrow(s) deteched, image saved to `pics/{}.jpg`".format(n))
+        else:
+            print("No arrow detected, image saved to `pics/{}.jpg`".format(n))
 
 if __name__ == "__main__":
     _main()
