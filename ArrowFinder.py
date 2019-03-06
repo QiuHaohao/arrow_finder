@@ -29,7 +29,7 @@ class ArrowFinder:
             resolution=(1920,1088), 
             min_area = 3000, 
             color_threshold={
-                'lower': 160,
+                'lower': 120,
                 'upper': 255
             },
             max_aspect_ratio=1.3, 
