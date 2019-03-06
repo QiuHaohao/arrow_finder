@@ -194,13 +194,14 @@ class ArrowFinder:
             cv2.putText(frame, direction, (x, y), cv2.FONT_HERSHEY_SIMPLEX, 1.0, (255, 255, 255))
         return frame
 
-    def getArrows(self, with_image=False):
+    def getArrows(self, with_image=False, after_capture=lambda: None):
         '''The method that captures an image and return arrows detected in the image and optionally the image captured with bounding box and arrow label drawn on it.
 
         Args:
             with_image (bool): whether to generate the image with bounding boxes and arrow labels, defaults to False
         '''
         ims = self._capture(color=with_image)
+        after_capture()
         gray = ims['gray']
         arrows = self._find_arrows(gray)
         result = { 'arrows': arrows }
