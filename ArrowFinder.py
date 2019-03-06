@@ -225,7 +225,7 @@ def _main():
         im = Image.fromarray(image)
         im.save('pics/{}.jpg'.format(n))
         n += 1
-        if image:
+        if len(arrows):
             print("Arrow(s) deteched, image saved to `pics/{}.jpg`".format(n))
         else:
             print("No arrow detected, image saved to `pics/{}.jpg`".format(n))
