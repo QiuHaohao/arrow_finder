@@ -61,7 +61,7 @@ class ArrowFinder:
         return self.pos_model.predict(X)[0]
 
     def _load_model(self):
-        return load(filename)
+        return load(FILENAME_MODEL)
 
     def _find_rad(self, v1, v2):
         return math.acos(np.dot(v1, v2) / (np.linalg.norm(v1) * np.linalg.norm(v2)))
@@ -247,6 +247,7 @@ def _main():
         n += 1
         if len(arrows):
             print("Arrow(s) deteched, image saved to `pics/{}.jpg`".format(n))
+            print(arrows)
             for arrow in arrows:
                 box = arrow["box"]
                 print("Bounding box: {}, Position: ".format(box), end="")
