@@ -210,7 +210,7 @@ class ArrowFinder:
             color = ims['color']
             result['image'] = self._draw(arrows, color)
             # Save image
-            im = Image.fromarray(image)
+            im = Image.fromarray(result['image'])
             im.save('pics/{}.jpg'.format(self.n))
             self.n += 1
         return result
