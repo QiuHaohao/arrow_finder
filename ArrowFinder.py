@@ -5,6 +5,8 @@ from picamera.array import PiRGBArray
 import numpy as np
 import math
 
+from sklearn.externals.joblib import load
+
 MIN_AREA = 3000
 
 NUM_POINTS = 7
@@ -13,6 +15,8 @@ ARROW_UP = "ARROW_UP"
 ARROW_DOWN = "ARROW_DOWN"
 ARROW_LEFT = "ARROW_LEFT"
 ARROW_RIGHT = "ARROW_RIGHT"
+
+FILENAME_MODEL = 'model.pickle'
 
 class ArrowFinder:
     """A class that detects solid white arrows found in rpi's camera.
@@ -39,12 +43,25 @@ class ArrowFinder:
 
         self.camera = PiCamera()
         self.camera.resolution = resolution
+        self.pos_model = self._load_model()
         self.min_area = min_area
         self.color_threshold = color_threshold
         self.max_aspect_ratio = max_aspect_ratio
         self.radian_epsilon = radian_epsilon
         self.threshold_rad = threshold_rad
         self.n = 0
+
+    def _scale(self, box):
+        X = self.camera.resolution[0]
+        Y = self.camera.resolution[1]
+        return [box[0]/X, box[1]/Y, box[2]/X, box[3]/Y]
+
+    def _predict(self, box):
+        X = [self._scale(box)]
+        return self.pos_model.predict(X)
+
+    def _load_model(self):
+        return load(filename)
 
     def _find_rad(self, v1, v2):
         return math.acos(np.dot(v1, v2) / (np.linalg.norm(v1) * np.linalg.norm(v2)))
@@ -161,17 +178,19 @@ class ArrowFinder:
             c for c in contours_big_approx
             if len(c) == NUM_POINTS
         ]
-        arrows = [
+        arrowlikes = [
             {
                 "dir": self._find_arrow_direction(c),
                 "box": cv2.boundingRect(c)
             }
             for c in contours_arrowlike
         ]
-        return [
-            a for a in arrows
+        arrows = [
+            {**a, "pos": self._predict(a['box'])} 
+            for a in arrowlikes
             if a['dir'] and self._is_around_square(a['box'])
         ]
+        return arrows
 
     def _capture(self, color=True, gray=True):
         output = PiRGBArray(self.camera)
@@ -225,14 +244,13 @@ def _main():
         input("Press Enter to take a picture")
         result = af.getArrows(with_image=True)
         arrows = result['arrows']
-        print("Arrows deteched: {}".format(arrows))
-        image = result['image']
-        # Save image
-        im = Image.fromarray(image)
-        im.save('pics/{}.jpg'.format(n))
         n += 1
         if len(arrows):
             print("Arrow(s) deteched, image saved to `pics/{}.jpg`".format(n))
+            for arrow in arrows:
+                box = arrow["box"]
+                print("Bounding box: {}, Position: ".format(box), end="")
+                input()
         else:
             print("No arrow detected, image saved to `pics/{}.jpg`".format(n))
 
