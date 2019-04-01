@@ -44,6 +44,7 @@ class ArrowFinder:
         self.max_aspect_ratio = max_aspect_ratio
         self.radian_epsilon = radian_epsilon
         self.threshold_rad = threshold_rad
+        self.n = 0
 
     def _find_rad(self, v1, v2):
         return math.acos(np.dot(v1, v2) / (np.linalg.norm(v1) * np.linalg.norm(v2)))
@@ -208,6 +209,10 @@ class ArrowFinder:
         if with_image:
             color = ims['color']
             result['image'] = self._draw(arrows, color)
+            # Save image
+            im = Image.fromarray(image)
+            im.save('pics/{}.jpg'.format(self.n))
+            self.n += 1
         return result
 
 
