@@ -58,7 +58,7 @@ class ArrowFinder:
 
     def _predict(self, box):
         X = [self._scale(box)]
-        return self.pos_model.predict(X)
+        return self.pos_model.predict(X)[0]
 
     def _load_model(self):
         return load(filename)
