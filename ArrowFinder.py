@@ -210,8 +210,15 @@ class ArrowFinder:
             w = arrow['box'][2]
             h = arrow['box'][3]
             direction = arrow['dir']
+            pos = arrow['pos']
             cv2.rectangle(frame, (x,y), (x+w, y+h), (255,0,0), 2)
-            cv2.putText(frame, direction, (x, y), cv2.FONT_HERSHEY_SIMPLEX, 1.0, (255, 255, 255))
+            cv2.putText(
+                frame,
+                direction + " Position: {}".format(pos), 
+                (x, y), 
+                cv2.FONT_HERSHEY_SIMPLEX, 
+                2.0, 
+                (255, 255, 255))
         return frame
 
     def getArrows(self, with_image=False, after_capture=lambda: None):
