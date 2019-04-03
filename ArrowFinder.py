@@ -192,9 +192,10 @@ class ArrowFinder:
         ]
         return arrows
 
-    def _capture(self, color=True, gray=True):
+    def _capture(self, color=True, gray=True, after_capture=lambda: None):
         output = PiRGBArray(self.camera)
         self.camera.capture(output,'bgr')
+        after_capture()
         frame = output.array
         result = {}
         if color:
@@ -227,8 +228,7 @@ class ArrowFinder:
         Args:
             with_image (bool): whether to generate the image with bounding boxes and arrow labels, defaults to False
         '''
-        ims = self._capture(color=with_image)
-        after_capture()
+        ims = self._capture(color=with_image, after_capture=after_capture)
         gray = ims['gray']
         arrows = self._find_arrows(gray)
         result = { 'arrows': arrows }
